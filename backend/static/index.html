@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume & ATS Master | Smart Resume Optimization Engine</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            dark: {
+              800: '#1e293b',
+              850: '#172033',
+              900: '#0f172a',
+              950: '#090d16',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.4);
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.7);
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-report, #printable-report * {
+        visibility: visible;
+      }
+      #printable-report {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP NAVBAR -->
+  <header class="border-b border-slate-800 bg-dark-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <i data-lucide="file-check-2" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">ResumeAI</span>
+            <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">ATS Pro 2.0</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Intelligent Resume & ATS Optimization Engine</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Sample Loaders -->
+        <div class="hidden md:flex items-center space-x-1.5 bg-slate-800/60 p-1 rounded-lg border border-slate-700/60 text-xs">
+          <span class="text-slate-400 px-2 font-medium">Quick Samples:</span>
+          <button onclick="loadSample('swe')" class="px-2.5 py-1 rounded-md bg-slate-700 hover:bg-indigo-600 hover:text-white text-slate-300 font-medium transition flex items-center space-x-1">
+            <i data-lucide="code" class="w-3.5 h-3.5"></i>
+            <span>Software Eng</span>
+          </button>
+          <button onclick="loadSample('ds')" class="px-2.5 py-1 rounded-md bg-slate-700 hover:bg-purple-600 hover:text-white text-slate-300 font-medium transition flex items-center space-x-1">
+            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+            <span>AI / Data Science</span>
+          </button>
+        </div>
+
+        <!-- API Key Modal Trigger -->
+        <button onclick="openApiKeyModal()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-300 flex items-center space-x-1.5 transition">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="apiKeyBtnText">AI Settings</span>
+        </button>
+
+        <!-- Print/Export -->
+        <button id="printBtn" onclick="window.print()" class="hidden px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-300 sm:flex items-center space-x-1.5 transition">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>Print Report</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- HERO INTRO -->
+    <section class="text-center max-w-3xl mx-auto space-y-3">
+      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold">
+        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+        <span>Instant Auto-Score on Upload • Google XYZ Formula • Semantic Keyword Matching</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+        Beat the ATS. Land the <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Interview</span>.
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Upload your resume for an <strong>instant ATS health & score audit</strong>. Optionally paste a target job description to get role-specific keyword matching, skills gap analysis, and tailored AI rewrites.
+      </p>
+    </section>
+
+    <!-- INPUT PANELS (TWO COLUMN) -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- RESUME INPUT CARD -->
+      <div class="bg-dark-900 border border-slate-800/80 rounded-2xl p-6 flex flex-col shadow-xl">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-white">1. Your Resume</h2>
+              <p class="text-xs text-slate-400">Upload PDF, DOCX, or paste text</p>
+            </div>
+          </div>
+          <!-- Tabs: Upload vs Paste -->
+          <div class="flex items-center bg-slate-800 p-0.5 rounded-lg text-xs font-medium">
+            <button id="tabUploadBtn" onclick="setResumeInputTab('upload')" class="px-2.5 py-1 rounded-md bg-indigo-600 text-white transition">Upload File</button>
+            <button id="tabPasteBtn" onclick="setResumeInputTab('paste')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">Paste Text</button>
+          </div>
+        </div>
+
+        <div class="mt-4 flex-1 flex flex-col">
+          <!-- File Dropzone -->
+          <div id="dropzoneArea" class="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-700/80 hover:border-indigo-500 rounded-xl p-6 text-center cursor-pointer bg-dark-850/50 hover:bg-dark-850 transition duration-200 group min-h-[220px]">
+            <input type="file" id="resumeFileInput" accept=".pdf,.docx,.doc,.txt,.rtf" class="hidden" onchange="handleFileSelect(event)">
+            
+            <div class="w-14 h-14 rounded-full bg-slate-800 group-hover:bg-indigo-500/20 text-slate-400 group-hover:text-indigo-400 flex items-center justify-center transition mb-3">
+              <i data-lucide="upload-cloud" class="w-7 h-7"></i>
+            </div>
+            
+            <p class="text-sm font-bold text-slate-200">Click to browse or drag & drop resume here</p>
+            <p class="text-xs text-slate-400 mt-1">Supports PDF, DOCX, TXT (Instant Auto-Scoring on Upload)</p>
+            
+            <button type="button" onclick="document.getElementById('resumeFileInput').click()" class="mt-4 px-4 py-2 rounded-lg bg-slate-800 hover:bg-indigo-600 hover:text-white border border-slate-700 text-xs font-semibold text-indigo-400 transition flex items-center space-x-1.5">
+              <i data-lucide="folder-open" class="w-3.5 h-3.5"></i>
+              <span>Browse Computer</span>
+            </button>
+
+            <!-- Selected File Info Banner -->
+            <div id="selectedFileInfo" class="hidden mt-3 text-xs bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 rounded-md px-3.5 py-2 flex items-center space-x-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+              <span id="selectedFileName" class="font-medium truncate max-w-xs">resume.pdf</span>
+              <button onclick="clearSelectedFile(event)" title="Remove file" class="text-slate-400 hover:text-red-400 ml-2 font-bold text-sm">&times;</button>
+            </div>
+          </div>
+
+          <!-- Paste Text Area -->
+          <div id="pasteTextArea" class="hidden flex-1 flex flex-col">
+            <textarea id="resumeText" placeholder="Paste your resume text here (Summary, Experience, Skills, Education)..." class="w-full flex-1 min-h-[220px] bg-dark-850 border border-slate-700/80 rounded-xl p-4 text-xs font-mono text-slate-200 focus:outline-none focus:border-indigo-500 transition resize-none custom-scrollbar leading-relaxed"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- JOB DESCRIPTION INPUT CARD -->
+      <div class="bg-dark-900 border border-slate-800/80 rounded-2xl p-6 flex flex-col shadow-xl">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+              <i data-lucide="briefcase" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-white">2. Target Job Description <span class="text-xs font-normal text-slate-400">(Optional)</span></h2>
+              <p class="text-xs text-slate-400">Paste job requirements for role-specific match</p>
+            </div>
+          </div>
+          <span id="jdCharCount" class="text-xs text-slate-500">0 chars</span>
+        </div>
+
+        <div class="mt-4 flex-1 flex flex-col">
+          <textarea id="jdText" oninput="updateJdCharCount()" placeholder="Optional: Paste a job description to calculate role-specific keyword match % and identify missing technical requirements. If left blank, you will receive a general ATS Resume Health audit." class="w-full flex-1 min-h-[220px] bg-dark-850 border border-slate-700/80 rounded-xl p-4 text-xs font-mono text-slate-200 focus:outline-none focus:border-purple-500 transition resize-none custom-scrollbar leading-relaxed"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYZE ACTION BUTTON -->
+    <div class="flex justify-center pt-1">
+      <button id="analyzeBtn" onclick="runAnalysis()" class="relative inline-flex items-center justify-center px-8 py-3.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-xl shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 group">
+        <i data-lucide="sparkles" class="w-4 h-4 mr-2 group-hover:rotate-12 transition"></i>
+        <span id="analyzeBtnLabel">Analyze Resume & Calculate ATS Score</span>
+      </button>
+    </div>
+
+    <!-- ERROR NOTIFICATION -->
+    <div id="errorBanner" class="hidden max-w-3xl mx-auto p-4 rounded-xl bg-red-950/60 border border-red-800/60 text-red-200 text-xs flex items-start space-x-3">
+      <i data-lucide="alert-triangle" class="w-5 h-5 text-red-400 shrink-0"></i>
+      <div class="flex-1">
+        <h4 class="font-bold text-red-300">Analysis Error</h4>
+        <p id="errorMessage" class="mt-0.5 text-red-300/90"></p>
+      </div>
+      <button onclick="document.getElementById('errorBanner').classList.add('hidden')" class="text-red-400 hover:text-white">&times;</button>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div id="loadingState" class="hidden py-16 flex flex-col items-center justify-center text-center space-y-4">
+      <div class="relative w-16 h-16">
+        <div class="absolute inset-0 rounded-full border-4 border-indigo-500/20 animate-ping"></div>
+        <div class="w-16 h-16 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-white">Analyzing Resume & Evaluating ATS Score...</h3>
+        <p class="text-xs text-slate-400 mt-1">Extracting text, evaluating quantifiable metrics, scanning 300+ skills taxonomy, and auditing power verbs...</p>
+      </div>
+    </div>
+
+    <!-- RESULTS SECTION -->
+    <div id="resultsSection" class="hidden space-y-8">
+
+      <!-- MODE BANNER (Target Match vs General ATS Audit) -->
+      <div id="auditModeBanner"></div>
+      
+      <!-- SCORE HERO CARD -->
+      <section class="bg-dark-900 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- RADIAL PROGRESS CIRCLE -->
+          <div class="lg:col-span-4 flex flex-col items-center justify-center text-center border-b lg:border-b-0 lg:border-r border-slate-800/80 pb-6 lg:pb-0 lg:pr-8">
+            <div class="relative w-44 h-44 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" class="text-slate-800" fill="transparent" />
+                <circle id="scoreRadialCircle" cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" stroke-linecap="round" class="text-indigo-500 transition-all duration-1000 ease-out" stroke-dasharray="251.2" stroke-dashoffset="251.2" fill="transparent" />
+              </svg>
+              <div class="absolute flex flex-col items-center justify-center text-center">
+                <span id="scoreNumber" class="text-5xl font-black tracking-tight text-white">0</span>
+                <span id="scoreLabelText" class="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5">ATS Score</span>
+              </div>
+            </div>
+
+            <!-- Tier Badge -->
+            <div id="tierBadge" class="mt-4 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              Evaluating...
+            </div>
+            <p id="scoreSummaryHeadline" class="text-xs text-slate-400 mt-2 max-w-xs">
+              Based on keyword density, quantifiable metrics, and structure.
+            </p>
+          </div>
+
+          <!-- COMPONENT BREAKDOWN METRICS -->
+          <div class="lg:col-span-8 space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Score Dimension Breakdown</h3>
+            
+            <div class="space-y-3 text-xs">
+              <!-- Metric 1: Keyword Match -->
+              <div class="bg-dark-850 p-3.5 rounded-xl border border-slate-800/60">
+                <div class="flex justify-between items-center mb-1.5 font-semibold">
+                  <span class="text-slate-200 flex items-center">
+                    <i data-lucide="key" class="w-3.5 h-3.5 text-indigo-400 mr-1.5"></i>
+                    <span id="metricKeywordsLabel">Keyword & Semantic Relevance</span>
+                  </span>
+                  <span id="scoreKeywords" class="text-indigo-400 font-bold">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="barKeywords" class="h-full bg-indigo-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Metric 2: Skills Coverage -->
+              <div class="bg-dark-850 p-3.5 rounded-xl border border-slate-800/60">
+                <div class="flex justify-between items-center mb-1.5 font-semibold">
+                  <span class="text-slate-200 flex items-center">
+                    <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-400 mr-1.5"></i>
+                    <span id="metricSkillsLabel">Hard & Soft Skills Coverage</span>
+                  </span>
+                  <span id="scoreSkills" class="text-emerald-400 font-bold">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="barSkills" class="h-full bg-emerald-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Metric 3: Quantifiable Impact -->
+              <div class="bg-dark-850 p-3.5 rounded-xl border border-slate-800/60">
+                <div class="flex justify-between items-center mb-1.5 font-semibold">
+                  <span class="text-slate-200 flex items-center">
+                    <i data-lucide="trending-up" class="w-3.5 h-3.5 text-purple-400 mr-1.5"></i>
+                    Impact, Metrics & Power Verbs (Google XYZ)
+                  </span>
+                  <span id="scoreImpact" class="text-purple-400 font-bold">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="barImpact" class="h-full bg-purple-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Metric 4: Structure & Contact -->
+              <div class="bg-dark-850 p-3.5 rounded-xl border border-slate-800/60">
+                <div class="flex justify-between items-center mb-1.5 font-semibold">
+                  <span class="text-slate-200 flex items-center">
+                    <i data-lucide="layout" class="w-3.5 h-3.5 text-amber-400 mr-1.5"></i>
+                    Sections & Contact Completeness
+                  </span>
+                  <span id="scoreStructure" class="text-amber-400 font-bold">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="barStructure" class="h-full bg-amber-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Metric 5: Formatting & Length -->
+              <div class="bg-dark-850 p-3.5 rounded-xl border border-slate-800/60">
+                <div class="flex justify-between items-center mb-1.5 font-semibold">
+                  <span class="text-slate-200 flex items-center">
+                    <i data-lucide="align-left" class="w-3.5 h-3.5 text-blue-400 mr-1.5"></i>
+                    Formatting & Word Count Balance
+                  </span>
+                  <span id="scoreReadability" class="text-blue-400 font-bold">0%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="barReadability" class="h-full bg-blue-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TABBED WORKSPACE -->
+      <section class="bg-dark-900 border border-slate-800/80 rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- Tab Navigation Bar -->
+        <div class="flex border-b border-slate-800 bg-dark-850/60 overflow-x-auto custom-scrollbar">
+          <button onclick="switchTab('skills')" id="tabNav-skills" class="tab-nav-btn px-5 py-3.5 text-xs font-bold border-b-2 border-indigo-500 text-indigo-400 flex items-center space-x-2 shrink-0">
+            <i data-lucide="tags" class="w-4 h-4"></i>
+            <span>Skills & Gap Analysis</span>
+          </button>
+          <button onclick="switchTab('recruiter')" id="tabNav-recruiter" class="tab-nav-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 shrink-0">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+            <span>AI Recruiter Verdict</span>
+          </button>
+          <button onclick="switchTab('bullets')" id="tabNav-bullets" class="tab-nav-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 shrink-0">
+            <i data-lucide="wand-2" class="w-4 h-4"></i>
+            <span>Bullet Point Optimizer</span>
+          </button>
+          <button onclick="switchTab('coverletter')" id="tabNav-coverletter" class="tab-nav-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 shrink-0">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            <span>Tailored Cover Letter</span>
+          </button>
+          <button onclick="switchTab('interview')" id="tabNav-interview" class="tab-nav-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 shrink-0">
+            <i data-lucide="messages-square" class="w-4 h-4"></i>
+            <span>Interview Prep</span>
+          </button>
+          <button onclick="switchTab('audit')" id="tabNav-audit" class="tab-nav-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 shrink-0">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>Structure & Formatting Audit</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: SKILLS & GAP ANALYSIS -->
+        <div id="tabContent-skills" class="tab-content p-6 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Matched Hard Skills -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-bold text-emerald-400 flex items-center">
+                  <i data-lucide="check-circle-2" class="w-4 h-4 mr-2"></i>
+                  <span id="matchedSkillsHeading">Technical Skills Found</span> (<span id="matchedSkillsCount">0</span>)
+                </h4>
+                <span id="matchedSkillsSub" class="text-xs text-slate-400">Extracted from Resume</span>
+              </div>
+              <div id="matchedHardSkillsList" class="flex flex-wrap gap-1.5 min-h-[60px]"></div>
+            </div>
+
+            <!-- Missing Hard Skills -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-bold text-rose-400 flex items-center">
+                  <i data-lucide="alert-circle" class="w-4 h-4 mr-2"></i>
+                  <span id="missingSkillsHeading">Target Skills Gap</span> (<span id="missingSkillsCount">0</span>)
+                </h4>
+                <span id="missingSkillsSub" class="text-xs text-rose-400/80 font-medium">Critical ATS Gaps</span>
+              </div>
+              <div id="missingHardSkillsList" class="flex flex-wrap gap-1.5 min-h-[60px]"></div>
+              <p id="missingSkillsTip" class="text-[11px] text-slate-400 mt-3 italic">
+                Tip: Adding missing keywords into your bullet points and skills list directly increases your resume's search ranking in Taleo, Workday, and Greenhouse.
+              </p>
+            </div>
+          </div>
+
+          <!-- Soft Skills & Additional Skills -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Soft Skills -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+              <h4 class="text-sm font-bold text-purple-400 flex items-center mb-3">
+                <i data-lucide="users" class="w-4 h-4 mr-2"></i>
+                Soft Skills & Leadership Found
+              </h4>
+              <div class="space-y-3">
+                <div>
+                  <span class="text-xs text-slate-400 block mb-1.5">Identified in Resume:</span>
+                  <div id="matchedSoftSkillsList" class="flex flex-wrap gap-1.5"></div>
+                </div>
+                <div id="missingSoftSkillsContainer">
+                  <span class="text-xs text-slate-400 block mb-1.5">Missing Soft Skills from JD:</span>
+                  <div id="missingSoftSkillsList" class="flex flex-wrap gap-1.5"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Resume Skills -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+              <h4 class="text-sm font-bold text-blue-400 flex items-center mb-3">
+                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
+                Domain & Specialized Keywords
+              </h4>
+              <p class="text-xs text-slate-400 mb-2">Additional technical proficiencies extracted from your work experience:</p>
+              <div id="additionalSkillsList" class="flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+
+          <!-- Top Keywords Table -->
+          <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+            <h4 class="text-sm font-bold text-white flex items-center mb-3">
+              <i data-lucide="hash" class="w-4 h-4 text-indigo-400 mr-2"></i>
+              <span id="topKeywordsHeading">Top Keywords Identified</span>
+            </h4>
+            <div class="overflow-x-auto custom-scrollbar">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-slate-800 text-slate-400">
+                    <th class="py-2 px-3 font-semibold">Keyword / Term</th>
+                    <th class="py-2 px-3 font-semibold">Weight / Frequency</th>
+                    <th class="py-2 px-3 font-semibold">Status in Resume</th>
+                  </tr>
+                </thead>
+                <tbody id="topKeywordsTableBody" class="divide-y divide-slate-800/60 text-slate-300"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: AI RECRUITER VERDICT -->
+        <div id="tabContent-recruiter" class="tab-content hidden p-6 space-y-6">
+          <div class="bg-gradient-to-r from-indigo-950/40 via-purple-950/40 to-dark-850 p-6 rounded-2xl border border-indigo-500/20">
+            <div class="flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Recruiter 6-Second First Impression</span>
+            </div>
+            <p id="recruiterVerdictText" class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+              Loading recruiter verdict...
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Strengths -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+              <h4 class="text-sm font-bold text-emerald-400 flex items-center mb-3">
+                <i data-lucide="thumbs-up" class="w-4 h-4 mr-2"></i>
+                Top Competitive Strengths
+              </h4>
+              <ul id="recruiterStrengthsList" class="space-y-2.5 text-xs text-slate-300"></ul>
+            </div>
+
+            <!-- Blindspots -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+              <h4 class="text-sm font-bold text-rose-400 flex items-center mb-3">
+                <i data-lucide="alert-octagon" class="w-4 h-4 mr-2"></i>
+                Critical Blindspots & Risks
+              </h4>
+              <ul id="recruiterBlindspotsList" class="space-y-2.5 text-xs text-slate-300"></ul>
+            </div>
+          </div>
+
+          <!-- Market Positioning & Tailoring Advice -->
+          <div class="bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-4">
+            <h4 class="text-sm font-bold text-amber-400 flex items-center">
+              <i data-lucide="compass" class="w-4 h-4 mr-2"></i>
+              Tactical Tailoring Plan & Positioning
+            </h4>
+            <div id="tailoringAdviceList" class="space-y-2 text-xs text-slate-300"></div>
+            <div class="pt-2 border-t border-slate-800">
+              <span class="text-xs text-slate-400 font-semibold">Compensation & Tier Positioning:</span>
+              <p id="salaryPositioningText" class="text-xs text-slate-300 mt-1 italic"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: BULLET POINT OPTIMIZER -->
+        <div id="tabContent-bullets" class="tab-content hidden p-6 space-y-6">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center">
+              <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400 mr-2"></i>
+              Google XYZ Formula Bullet Point Rewriter
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Select or paste any bullet point below to generate 3 high-impact variations with quantifiable results and power action verbs.
+            </p>
+          </div>
+
+          <!-- Interactive Rewrite Form -->
+          <div class="bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-4">
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-slate-300">Original Bullet Point to Improve:</label>
+              <textarea id="bulletInput" rows="2" placeholder="e.g., Worked on backend APIs and helped with database performance..." class="w-full bg-dark-900 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 font-mono"></textarea>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs text-slate-400">Target Skill / Tool to highlight:</span>
+                <input type="text" id="bulletTargetSkill" placeholder="e.g. AWS, Python, Redis" class="bg-dark-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+              </div>
+              <button onclick="rewriteCurrentBullet()" id="rewriteBulletBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white transition flex items-center space-x-1.5 shadow-lg shadow-indigo-600/20">
+                <i data-lucide="wand" class="w-3.5 h-3.5"></i>
+                <span>Rewrite with Google XYZ Formula</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Rewrite Output Variations -->
+          <div id="bulletVariationsContainer" class="hidden space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-400">Optimized Variations (Click to Copy):</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- Variation 1: Metrics Focused -->
+              <div class="bg-dark-850 p-4 rounded-xl border border-emerald-500/30 hover:border-emerald-500 transition cursor-pointer flex flex-col justify-between" onclick="copyText('varMetrics')">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Metrics & Impact (XYZ)</span>
+                    <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400"></i>
+                  </div>
+                  <p id="varMetrics" class="text-xs text-slate-200 leading-relaxed font-mono"></p>
+                </div>
+                <span class="text-[10px] text-emerald-400 mt-3 font-semibold">Click to copy</span>
+              </div>
+
+              <!-- Variation 2: Technical Depth -->
+              <div class="bg-dark-850 p-4 rounded-xl border border-indigo-500/30 hover:border-indigo-500 transition cursor-pointer flex flex-col justify-between" onclick="copyText('varTechnical')">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">Technical Architecture</span>
+                    <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400"></i>
+                  </div>
+                  <p id="varTechnical" class="text-xs text-slate-200 leading-relaxed font-mono"></p>
+                </div>
+                <span class="text-[10px] text-indigo-400 mt-3 font-semibold">Click to copy</span>
+              </div>
+
+              <!-- Variation 3: Leadership & Execution -->
+              <div class="bg-dark-850 p-4 rounded-xl border border-purple-500/30 hover:border-purple-500 transition cursor-pointer flex flex-col justify-between" onclick="copyText('varLeadership')">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] font-bold text-purple-400 uppercase tracking-wider">Leadership & Ownership</span>
+                    <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400"></i>
+                  </div>
+                  <p id="varLeadership" class="text-xs text-slate-200 leading-relaxed font-mono"></p>
+                </div>
+                <span class="text-[10px] text-purple-400 mt-3 font-semibold">Click to copy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bullets Detected From Current Resume -->
+          <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+              Bullets Detected in Your Resume That Need More Measurable Numbers:
+            </h4>
+            <div id="detectedWeakBulletsList" class="space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- TAB 4: COVER LETTER GENERATOR -->
+        <div id="tabContent-coverletter" class="tab-content hidden p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center">
+                <i data-lucide="mail" class="w-4 h-4 text-purple-400 mr-2"></i>
+                Targeted ATS Cover Letter Generator
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">
+                Generates a customized, narrative cover letter connecting your resume achievements to the job description.
+              </p>
+            </div>
+            <button onclick="generateCoverLetter()" id="genCoverLetterBtn" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition flex items-center space-x-1.5 shadow-lg shadow-purple-600/20 shrink-0">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>Generate Custom Cover Letter</span>
+            </button>
+          </div>
+
+          <!-- Metadata Inputs -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="text-xs font-semibold text-slate-400 block mb-1">Your Full Name:</label>
+              <input type="text" id="clCandidateName" placeholder="e.g. Alex Chen" class="w-full bg-dark-850 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-400 block mb-1">Target Company:</label>
+              <input type="text" id="clCompanyName" placeholder="e.g. Acme Corp" class="w-full bg-dark-850 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-400 block mb-1">Job Title:</label>
+              <input type="text" id="clRoleTitle" placeholder="e.g. Senior Software Engineer" class="w-full bg-dark-850 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+            </div>
+          </div>
+
+          <!-- Cover Letter Content Box -->
+          <div class="bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-300">Generated Cover Letter:</span>
+              <div class="flex items-center space-x-2">
+                <button onclick="copyText('coverLetterOutput')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 flex items-center space-x-1">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>Copy</span>
+                </button>
+                <button onclick="downloadCoverLetter()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 flex items-center space-x-1">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span>Download .txt</span>
+                </button>
+              </div>
+            </div>
+            <textarea id="coverLetterOutput" rows="14" class="w-full bg-dark-900 border border-slate-700/80 rounded-xl p-4 text-xs font-mono text-slate-200 focus:outline-none focus:border-purple-500 leading-relaxed custom-scrollbar resize-none" placeholder="Click 'Generate Custom Cover Letter' to write a tailored cover letter..."></textarea>
+          </div>
+        </div>
+
+        <!-- TAB 5: INTERVIEW PREP -->
+        <div id="tabContent-interview" class="tab-content hidden p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center">
+                <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                Tailored Interview Questions & Answering Strategies
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">
+                Targeting your resume's claimed experience and specific gaps identified in the Job Description.
+              </p>
+            </div>
+            <button onclick="generateInterviewPrep()" id="genInterviewBtn" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition flex items-center space-x-1.5 shadow-lg shadow-emerald-600/20 shrink-0">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Refresh Questions</span>
+            </button>
+          </div>
+
+          <div id="interviewQuestionsList" class="space-y-4"></div>
+        </div>
+
+        <!-- TAB 6: AUDIT & CHECKLIST -->
+        <div id="tabContent-audit" class="tab-content hidden p-6 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Contact Info Audit -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-3">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Contact Information</h4>
+              <div id="contactAuditList" class="space-y-2 text-xs"></div>
+            </div>
+
+            <!-- Standard Sections Audit -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-3">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Core Resume Sections</h4>
+              <div id="sectionsAuditList" class="space-y-2 text-xs"></div>
+            </div>
+
+            <!-- Readability & Length Audit -->
+            <div class="bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-3">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Formatting & Word Density</h4>
+              <div class="space-y-2.5 text-xs">
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-400">Total Word Count:</span>
+                  <span id="auditWordCount" class="font-bold text-white">0</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-400">Estimated Pages:</span>
+                  <span id="auditEstPages" class="font-bold text-white">1</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-400">Length Status:</span>
+                  <span id="auditLengthStatus" class="font-bold text-emerald-400 text-right">Optimal</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-400">Action Verbs Found:</span>
+                  <span id="auditStrongVerbsCount" class="font-bold text-indigo-400">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comprehensive Recommendations List -->
+          <div class="bg-dark-850 p-5 rounded-xl border border-slate-800">
+            <h4 class="text-sm font-bold text-white flex items-center mb-4">
+              <i data-lucide="check-square" class="w-4 h-4 text-indigo-400 mr-2"></i>
+              Actionable Fixes & Optimization Checklist
+            </h4>
+            <div id="actionRecommendationsList" class="space-y-3"></div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- PRINTABLE REPORT WRAPPER -->
+    <div id="printable-report" class="hidden p-8 text-black bg-white">
+      <h1 class="text-2xl font-bold border-b pb-2">Resume & ATS Audit Report</h1>
+      <div id="printReportContent" class="mt-4 space-y-4"></div>
+    </div>
+
+  </main>
+
+  <!-- API KEY SETTINGS MODAL -->
+  <div id="apiKeyModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+    <div class="bg-dark-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+          <h3 class="text-base font-bold text-white">AI Engine Settings</h3>
+        </div>
+        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        The app includes a built-in algorithmic NLP engine that works 100% offline without any API key. If you provide a Google Gemini API key, deep recruiter reasoning, bullet rewrites, and cover letters are powered by Gemini 2.5 Flash!
+      </p>
+      <div>
+        <label class="text-xs font-semibold text-slate-300 block mb-1.5">Google Gemini API Key (Optional):</label>
+        <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="w-full bg-dark-850 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 font-mono">
+      </div>
+      <div class="flex justify-end space-x-2 pt-2">
+        <button onclick="closeApiKeyModal()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300">Close</button>
+        <button onclick="saveApiKey()" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-lg shadow-indigo-600/30">Save Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    let currentResumeFile = null;
+    let resumeInputMode = 'upload'; // 'upload' or 'paste'
+    let currentAnalysisData = null;
+    let currentApiKey = localStorage.getItem('RESUME_AI_GEMINI_KEY') || '';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      if (currentApiKey) {
+        document.getElementById('apiKeyInput').value = currentApiKey;
+        document.getElementById('apiKeyBtnText').innerText = 'AI Active ✓';
+      }
+
+      // Allow clicking anywhere inside dropzone to trigger file browser
+      const dropzone = document.getElementById('dropzoneArea');
+      dropzone.addEventListener('click', (e) => {
+        if (e.target.closest('#selectedFileInfo') || e.target.id === 'resumeFileInput') return;
+        document.getElementById('resumeFileInput').click();
+      });
+
+      // Drag and drop handlers
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropzone.classList.add('border-indigo-500', 'bg-dark-850');
+        }, false);
+      });
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('border-indigo-500', 'bg-dark-850');
+        }, false);
+      });
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt && dt.files;
+        if (files && files.length > 0) {
+          processSelectedFile(files[0]);
+        }
+      });
+    });
+
+    function setResumeInputTab(tab) {
+      resumeInputMode = tab;
+      const uploadBtn = document.getElementById('tabUploadBtn');
+      const pasteBtn = document.getElementById('tabPasteBtn');
+      const dropzone = document.getElementById('dropzoneArea');
+      const pasteArea = document.getElementById('pasteTextArea');
+
+      if (tab === 'upload') {
+        uploadBtn.className = 'px-2.5 py-1 rounded-md bg-indigo-600 text-white transition';
+        pasteBtn.className = 'px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition';
+        dropzone.classList.remove('hidden');
+        pasteArea.classList.add('hidden');
+      } else {
+        pasteBtn.className = 'px-2.5 py-1 rounded-md bg-indigo-600 text-white transition';
+        uploadBtn.className = 'px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition';
+        dropzone.classList.add('hidden');
+        pasteArea.classList.remove('hidden');
+      }
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files && event.target.files[0];
+      if (file) {
+        processSelectedFile(file);
+      }
+    }
+
+    function processSelectedFile(file) {
+      currentResumeFile = file;
+      document.getElementById('selectedFileName').innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      document.getElementById('selectedFileInfo').classList.remove('hidden');
+      
+      // Auto-calculate score as soon as file is chosen!
+      runAnalysis();
+    }
+
+    function clearSelectedFile(event) {
+      if (event) event.stopPropagation();
+      currentResumeFile = null;
+      document.getElementById('resumeFileInput').value = '';
+      document.getElementById('selectedFileInfo').classList.add('hidden');
+    }
+
+    function updateJdCharCount() {
+      const len = document.getElementById('jdText').value.length;
+      document.getElementById('jdCharCount').innerText = `${len} chars`;
+      const btnLabel = document.getElementById('analyzeBtnLabel');
+      if (len >= 20) {
+        btnLabel.innerText = "Analyze Resume & Calculate Target Match";
+      } else {
+        btnLabel.innerText = "Analyze Resume & Calculate ATS Score";
+      }
+    }
+
+    async function loadSample(type) {
+      try {
+        const resp = await fetch(`/api/sample-data/${type}`);
+        if (!resp.ok) throw new Error("Could not load sample data");
+        const data = await resp.json();
+        
+        setResumeInputTab('paste');
+        document.getElementById('resumeText').value = data.resume;
+        document.getElementById('jdText').value = data.job_description;
+        updateJdCharCount();
+
+        runAnalysis();
+      } catch (err) {
+        showError("Failed to load sample: " + err.message);
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-nav-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-500', 'text-indigo-400');
+        btn.classList.add('border-transparent', 'text-slate-400');
+      });
+
+      const targetContent = document.getElementById(`tabContent-${tabId}`);
+      const targetNav = document.getElementById(`tabNav-${tabId}`);
+      if (targetContent) targetContent.classList.remove('hidden');
+      if (targetNav) {
+        targetNav.classList.remove('border-transparent', 'text-slate-400');
+        targetNav.classList.add('border-indigo-500', 'text-indigo-400');
+      }
+    }
+
+    function showError(msg) {
+      document.getElementById('errorMessage').innerText = msg;
+      document.getElementById('errorBanner').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openApiKeyModal() {
+      document.getElementById('apiKeyModal').classList.remove('hidden');
+    }
+
+    function closeApiKeyModal() {
+      document.getElementById('apiKeyModal').classList.add('hidden');
+    }
+
+    function saveApiKey() {
+      const val = document.getElementById('apiKeyInput').value.trim();
+      currentApiKey = val;
+      localStorage.setItem('RESUME_AI_GEMINI_KEY', val);
+      document.getElementById('apiKeyBtnText').innerText = val ? 'AI Active ✓' : 'AI Settings';
+      closeApiKeyModal();
+    }
+
+    async function runAnalysis() {
+      document.getElementById('errorBanner').classList.add('hidden');
+
+      const formData = new FormData();
+      const jdText = document.getElementById('jdText').value.trim();
+      formData.append('jd_text', jdText);
+
+      if (currentApiKey) {
+        formData.append('api_key', currentApiKey);
+      }
+
+      if (resumeInputMode === 'upload') {
+        if (!currentResumeFile) {
+          showError("Please select a resume file (PDF, DOCX, TXT) or switch to Paste Text.");
+          return;
+        }
+        formData.append('file', currentResumeFile);
+      } else {
+        const textVal = document.getElementById('resumeText').value.trim();
+        if (!textVal || textVal.length < 30) {
+          showError("Please paste your resume text (at least 30 characters).");
+          return;
+        }
+        formData.append('resume_text', textVal);
+      }
+
+      // Show loading spinner
+      document.getElementById('loadingState').classList.remove('hidden');
+      document.getElementById('resultsSection').classList.add('hidden');
+      document.getElementById('analyzeBtn').disabled = true;
+
+      try {
+        const response = await fetch('/api/analyze', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.detail || "Analysis failed. Please check your inputs.");
+        }
+
+        currentAnalysisData = data;
+        renderResults(data);
+
+        // Populate paste tab with the extracted text so user can view/edit it if they want
+        if (data.full_resume_text) {
+          document.getElementById('resumeText').value = data.full_resume_text;
+        }
+
+        // Scroll to results
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+
+        if (data.ats_results.overall_score >= 75) {
+          confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('analyzeBtn').disabled = false;
+      }
+    }
+
+    function renderResults(data) {
+      const ats = data.ats_results;
+      const ai = data.ai_review || {};
+      const hasJd = data.has_target_job;
+
+      document.getElementById('resultsSection').classList.remove('hidden');
+      document.getElementById('printBtn').classList.remove('hidden');
+
+      // Mode Banner
+      const modeBanner = document.getElementById('auditModeBanner');
+      if (hasJd) {
+        modeBanner.className = 'p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2';
+        modeBanner.innerHTML = `
+          <div class="flex items-center space-x-2.5">
+            <i data-lucide="target" class="w-5 h-5 text-indigo-400 shrink-0"></i>
+            <div>
+              <span class="font-bold text-white text-xs sm:text-sm">Target Role Match Mode</span>
+              <p class="text-[11px] text-indigo-300/90">Comparing keywords, missing technical requirements, and skills against the provided Job Description.</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-md bg-indigo-500/20 text-[11px] font-bold text-indigo-300 shrink-0 text-center">Job-Specific Score</span>
+        `;
+      } else {
+        modeBanner.className = 'p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+        modeBanner.innerHTML = `
+          <div class="flex items-center space-x-2.5">
+            <i data-lucide="info" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <div>
+              <span class="font-bold text-white text-xs sm:text-sm">General ATS Resume Health Audit</span>
+              <p class="text-[11px] text-amber-300/90">Evaluated resume formatting, measurable impact metrics, contact info, sections, and detected skills.</p>
+            </div>
+          </div>
+          <button onclick="document.getElementById('jdText').focus(); document.getElementById('jdText').scrollIntoView({behavior: 'smooth'})" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shrink-0 transition">
+            + Compare Against Target JD
+          </button>
+        `;
+      }
+
+      // 1. Hero Score & Radial Gauge
+      const score = ats.overall_score;
+      document.getElementById('scoreNumber').innerText = score;
+      document.getElementById('scoreLabelText').innerText = hasJd ? "Target Match" : "ATS Health";
+      
+      const circumference = 2 * Math.PI * 40; // 251.2
+      const offset = circumference - (score / 100) * circumference;
+      const circle = document.getElementById('scoreRadialCircle');
+      circle.style.strokeDashoffset = offset;
+
+      if (score >= 80) {
+        circle.setAttribute('class', 'text-emerald-500 transition-all duration-1000 ease-out');
+      } else if (score >= 65) {
+        circle.setAttribute('class', 'text-indigo-500 transition-all duration-1000 ease-out');
+      } else if (score >= 50) {
+        circle.setAttribute('class', 'text-amber-500 transition-all duration-1000 ease-out');
+      } else {
+        circle.setAttribute('class', 'text-rose-500 transition-all duration-1000 ease-out');
+      }
+
+      // Tier Badge
+      const tier = ats.rating_tier;
+      const tierBadge = document.getElementById('tierBadge');
+      tierBadge.innerText = `${tier.label} • ${tier.badge}`;
+      tierBadge.className = `mt-4 px-3 py-1 rounded-full text-xs font-bold border ${getBadgeClass(tier.color)}`;
+
+      // 2. Component Scores Breakdown
+      const comps = ats.component_scores;
+      document.getElementById('metricKeywordsLabel').innerText = hasJd ? "Keyword & Semantic Relevance (35%)" : "Keyword Richness & Vocabulary (10%)";
+      document.getElementById('metricSkillsLabel').innerText = hasJd ? "Hard & Soft Skills Coverage (25%)" : "Skills Taxonomy Found (25%)";
+
+      setBar('scoreKeywords', 'barKeywords', comps.keyword_match);
+      setBar('scoreSkills', 'barSkills', comps.skills_coverage);
+      setBar('scoreImpact', 'barImpact', comps.impact_metrics);
+      setBar('scoreStructure', 'barStructure', comps.structure_contact);
+      setBar('scoreReadability', 'barReadability', comps.formatting_readability);
+
+      // 3. Tab 1: Skills & Gap Analysis
+      const skills = ats.skills_analysis;
+      document.getElementById('matchedSkillsCount').innerText = skills.matched_hard_skills.length;
+      document.getElementById('missingSkillsCount').innerText = skills.missing_hard_skills.length;
+
+      document.getElementById('matchedSkillsHeading').innerText = hasJd ? "Matched Hard Skills" : "Technical Skills Found";
+      document.getElementById('matchedSkillsSub').innerText = hasJd ? "Found in both resume and JD" : "Extracted from your resume";
+
+      document.getElementById('missingSkillsHeading').innerText = hasJd ? "Missing Target Skills" : "Target Skills Gap";
+      document.getElementById('missingSkillsSub').innerText = hasJd ? "Critical ATS Gaps" : "Paste JD to compare";
+
+      renderChips('matchedHardSkillsList', skills.matched_hard_skills, 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20');
+      
+      if (hasJd) {
+        renderChips('missingHardSkillsList', skills.missing_hard_skills, 'bg-rose-500/10 text-rose-400 border border-rose-500/20');
+        document.getElementById('missingSkillsTip').classList.remove('hidden');
+      } else {
+        const missingContainer = document.getElementById('missingHardSkillsList');
+        missingContainer.innerHTML = '<span class="text-xs text-slate-400 italic">No target Job Description provided. Paste a JD in panel 2 to see specific missing skills.</span>';
+        document.getElementById('missingSkillsTip').classList.add('hidden');
+      }
+
+      renderChips('matchedSoftSkillsList', skills.matched_soft_skills, 'bg-purple-500/10 text-purple-400 border border-purple-500/20');
+      
+      if (hasJd && skills.missing_soft_skills.length > 0) {
+        document.getElementById('missingSoftSkillsContainer').classList.remove('hidden');
+        renderChips('missingSoftSkillsList', skills.missing_soft_skills, 'bg-amber-500/10 text-amber-400 border border-amber-500/20');
+      } else {
+        document.getElementById('missingSoftSkillsContainer').classList.add('hidden');
+      }
+
+      renderChips('additionalSkillsList', skills.additional_resume_skills, 'bg-slate-800 text-slate-300 border border-slate-700');
+
+      // Top Keywords Table
+      document.getElementById('topKeywordsHeading').innerText = hasJd ? "Top Target Keywords in Job Description" : "Top Keywords Extracted from Your Resume";
+      const kwTable = document.getElementById('topKeywordsTableBody');
+      kwTable.innerHTML = '';
+      (ats.top_jd_keywords || []).forEach(kw => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-800/40 transition';
+        tr.innerHTML = `
+          <td class="py-2 px-3 font-medium text-slate-200">${kw.keyword}</td>
+          <td class="py-2 px-3 text-slate-400">${kw.weight}</td>
+          <td class="py-2 px-3">
+            ${kw.present_in_resume 
+              ? '<span class="text-emerald-400 font-semibold flex items-center"><i data-lucide="check" class="w-3.5 h-3.5 mr-1"></i> Found in Resume</span>' 
+              : '<span class="text-rose-400 font-semibold flex items-center"><i data-lucide="x" class="w-3.5 h-3.5 mr-1"></i> Missing</span>'}
+          </td>
+        `;
+        kwTable.appendChild(tr);
+      });
+
+      // 4. Tab 2: Recruiter Review
+      document.getElementById('recruiterVerdictText').innerText = ai.recruiter_verdict || "Candidate demonstrates strong alignment with core competencies.";
+      renderList('recruiterStrengthsList', ai.top_strengths || []);
+      renderList('recruiterBlindspotsList', ai.critical_blindspots || []);
+      renderList('tailoringAdviceList', ai.tailoring_advice || []);
+      document.getElementById('salaryPositioningText').innerText = ai.salary_market_positioning || "Competitive range for this role tier.";
+
+      // 5. Tab 3: Bullets Needing Metrics
+      const weakBullets = ats.impact_analysis.bullets_needing_metrics || [];
+      const weakBulletsList = document.getElementById('detectedWeakBulletsList');
+      weakBulletsList.innerHTML = '';
+      if (weakBullets.length === 0) {
+        weakBulletsList.innerHTML = '<p class="text-xs text-emerald-400">Excellent! Most of your evaluated bullet points already contain measurable metrics.</p>';
+      } else {
+        weakBullets.forEach(bullet => {
+          const div = document.createElement('div');
+          div.className = 'p-2.5 rounded-lg bg-dark-900 border border-slate-800 flex items-center justify-between hover:border-slate-700 transition';
+          div.innerHTML = `
+            <span class="text-xs text-slate-300 font-mono truncate mr-3">• ${bullet}</span>
+            <button onclick="selectBulletForRewrite('${escapeSingleQuotes(bullet)}')" class="px-2.5 py-1 rounded bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white text-[11px] font-semibold transition shrink-0">
+              Improve Bullet
+            </button>
+          `;
+          weakBulletsList.appendChild(div);
+        });
+      }
+
+      if (weakBullets.length > 0) {
+        document.getElementById('bulletInput').value = weakBullets[0];
+      }
+
+      // 6. Tab 6: Audits
+      renderContactAudit(ats.contact_info);
+      renderSectionsAudit(ats.sections);
+      document.getElementById('auditWordCount').innerText = ats.readability.word_count;
+      document.getElementById('auditEstPages').innerText = ats.readability.estimated_pages;
+      document.getElementById('auditLengthStatus').innerText = ats.readability.length_status;
+      document.getElementById('auditStrongVerbsCount').innerText = ats.impact_analysis.strong_verbs_count;
+
+      renderRecommendations(ats.recommendations);
+
+      if (ats.contact_info.email) {
+        const nameGuess = ats.contact_info.email.split('@')[0].replace(/[._]/g, ' ');
+        document.getElementById('clCandidateName').value = capitalizeWords(nameGuess);
+      }
+
+      lucide.createIcons();
+    }
+
+    function setBar(textId, barId, value) {
+      document.getElementById(textId).innerText = `${value}%`;
+      document.getElementById(barId).style.width = `${value}%`;
+    }
+
+    function getBadgeClass(color) {
+      switch(color) {
+        case 'emerald': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+        case 'blue': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        case 'amber': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        default: return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+      }
+    }
+
+    function renderChips(containerId, items, chipClass) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      if (!items || items.length === 0) {
+        container.innerHTML = '<span class="text-xs text-slate-500 italic">None detected</span>';
+        return;
+      }
+      items.forEach(item => {
+        const span = document.createElement('span');
+        span.className = `px-2.5 py-1 rounded-md text-xs font-semibold ${chipClass}`;
+        span.innerText = item;
+        container.appendChild(span);
+      });
+    }
+
+    function renderList(containerId, items) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start space-x-2';
+        li.innerHTML = `<span class="text-indigo-400 mt-0.5">•</span><span>${item}</span>`;
+        container.appendChild(li);
+      });
+    }
+
+    function renderContactAudit(contact) {
+      const list = document.getElementById('contactAuditList');
+      list.innerHTML = `
+        <div class="flex justify-between items-center py-1 border-b border-slate-800">
+          <span class="text-slate-400">Email Address:</span>
+          <span class="${contact.has_email ? 'text-emerald-400' : 'text-rose-400'} font-semibold">${contact.has_email ? contact.email : 'Missing'}</span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-slate-800">
+          <span class="text-slate-400">Phone Number:</span>
+          <span class="${contact.has_phone ? 'text-emerald-400' : 'text-rose-400'} font-semibold">${contact.has_phone ? contact.phone : 'Missing'}</span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-slate-800">
+          <span class="text-slate-400">LinkedIn Profile:</span>
+          <span class="${contact.has_linkedin ? 'text-emerald-400' : 'text-amber-400'} font-semibold">${contact.has_linkedin ? 'Detected' : 'Recommended'}</span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-slate-800">
+          <span class="text-slate-400">GitHub / Portfolio:</span>
+          <span class="${contact.has_github_or_portfolio ? 'text-emerald-400' : 'text-slate-500'} font-semibold">${contact.has_github_or_portfolio ? 'Detected' : 'Optional'}</span>
+        </div>
+      `;
+    }
+
+    function renderSectionsAudit(sections) {
+      const list = document.getElementById('sectionsAuditList');
+      list.innerHTML = '';
+      (sections.found || []).forEach(sec => {
+        list.innerHTML += `
+          <div class="flex justify-between items-center py-1 border-b border-slate-800">
+            <span class="text-slate-300">${sec}</span>
+            <span class="text-emerald-400 font-semibold">Found ✓</span>
+          </div>
+        `;
+      });
+      (sections.missing || []).forEach(sec => {
+        list.innerHTML += `
+          <div class="flex justify-between items-center py-1 border-b border-slate-800">
+            <span class="text-slate-400">${sec}</span>
+            <span class="text-rose-400 font-semibold">Missing ✗</span>
+          </div>
+        `;
+      });
+    }
+
+    function renderRecommendations(recs) {
+      const list = document.getElementById('actionRecommendationsList');
+      list.innerHTML = '';
+      recs.forEach(rec => {
+        let borderClass = 'border-slate-800';
+        let badgeColor = 'bg-slate-800 text-slate-300';
+        if (rec.type === 'critical') {
+          borderClass = 'border-rose-900/60 bg-rose-950/20';
+          badgeColor = 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+        } else if (rec.type === 'warning') {
+          borderClass = 'border-amber-900/60 bg-amber-950/20';
+          badgeColor = 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+        }
+
+        const div = document.createElement('div');
+        div.className = `p-3.5 rounded-xl border ${borderClass} space-y-1`;
+        div.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${badgeColor}">${rec.category}</span>
+            <h5 class="text-xs font-bold text-slate-200">${rec.title}</h5>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">${rec.description}</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Bullet Rewriting
+    function selectBulletForRewrite(bullet) {
+      document.getElementById('bulletInput').value = bullet;
+      switchTab('bullets');
+      document.getElementById('bulletInput').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function rewriteCurrentBullet() {
+      const bullet = document.getElementById('bulletInput').value.trim();
+      const targetSkill = document.getElementById('bulletTargetSkill').value.trim();
+      const jdText = document.getElementById('jdText').value.trim();
+
+      if (!bullet) {
+        showError("Please enter a bullet point to rewrite.");
+        return;
+      }
+
+      const btn = document.getElementById('rewriteBulletBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin mr-1"></i> Optimizing...`;
+      lucide.createIcons();
+
+      try {
+        const resp = await fetch('/api/ai/rewrite-bullet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bullet: bullet,
+            jd_text: jdText,
+            target_skill: targetSkill,
+            api_key: currentApiKey
+          })
+        });
+
+        const data = await resp.json();
+        if (data.success) {
+          const v = data.variations;
+          document.getElementById('varMetrics').innerText = v.metrics_focused;
+          document.getElementById('varTechnical').innerText = v.technical_focused;
+          document.getElementById('varLeadership').innerText = v.leadership_focused;
+          document.getElementById('bulletVariationsContainer').classList.remove('hidden');
+          lucide.createIcons();
+        }
+      } catch (err) {
+        showError("Failed to rewrite bullet: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="wand" class="w-3.5 h-3.5 mr-1"></i> Rewrite with Google XYZ Formula`;
+        lucide.createIcons();
+      }
+    }
+
+    // Cover Letter
+    async function generateCoverLetter() {
+      if (!currentAnalysisData) {
+        showError("Please analyze a resume first.");
+        return;
+      }
+
+      const btn = document.getElementById('genCoverLetterBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin mr-1"></i> Writing...`;
+      lucide.createIcons();
+
+      try {
+        const resp = await fetch('/api/ai/cover-letter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            resume_text: currentAnalysisData.full_resume_text,
+            jd_text: document.getElementById('jdText').value,
+            candidate_name: document.getElementById('clCandidateName').value,
+            company_name: document.getElementById('clCompanyName').value,
+            role_title: document.getElementById('clRoleTitle').value,
+            api_key: currentApiKey
+          })
+        });
+
+        const data = await resp.json();
+        if (data.success) {
+          document.getElementById('coverLetterOutput').value = data.cover_letter;
+        }
+      } catch (err) {
+        showError("Failed to generate cover letter: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1"></i> Generate Custom Cover Letter`;
+        lucide.createIcons();
+      }
+    }
+
+    function downloadCoverLetter() {
+      const text = document.getElementById('coverLetterOutput').value;
+      if (!text) return;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Tailored_Cover_Letter.txt';
+      a.click();
+    }
+
+    // Interview Prep
+    async function generateInterviewPrep() {
+      if (!currentAnalysisData) {
+        showError("Please analyze a resume first.");
+        return;
+      }
+
+      const btn = document.getElementById('genInterviewBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin mr-1"></i> Generating...`;
+      lucide.createIcons();
+
+      try {
+        const resp = await fetch('/api/ai/interview-prep', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            resume_text: currentAnalysisData.full_resume_text,
+            jd_text: document.getElementById('jdText').value,
+            skills_data: currentAnalysisData.ats_results.skills_analysis,
+            api_key: currentApiKey
+          })
+        });
+
+        const data = await resp.json();
+        if (data.success) {
+          renderInterviewQuestions(data.questions);
+        }
+      } catch (err) {
+        showError("Failed to generate interview prep: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="refresh-cw" class="w-3.5 h-3.5 mr-1"></i> Refresh Questions`;
+        lucide.createIcons();
+      }
+    }
+
+    function renderInterviewQuestions(questions) {
+      const container = document.getElementById('interviewQuestionsList');
+      container.innerHTML = '';
+      questions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'bg-dark-850 p-5 rounded-xl border border-slate-800 space-y-3';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${q.type.includes('STAR') ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">
+              Question ${idx + 1} • ${q.type}
+            </span>
+          </div>
+          <h4 class="text-sm font-bold text-white leading-snug">"${q.question}"</h4>
+          <div class="text-xs space-y-2 pt-1 border-t border-slate-800">
+            <p class="text-slate-400"><strong class="text-slate-300">Why they ask this:</strong> ${q.why_asked}</p>
+            <p class="text-slate-400"><strong class="text-emerald-400">Ideal Strategy & Answer Framework:</strong> ${q.ideal_strategy}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    // Helper utilities
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText || document.getElementById(elementId).value;
+      navigator.clipboard.writeText(text);
+      alert('Copied to clipboard!');
+    }
+
+    function escapeSingleQuotes(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function capitalizeWords(str) {
+      return str.replace(/\b\w/g, l => l.toUpperCase());
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+Senior Software Engineer - Distributed Systems & Cloud Platforms
+
+About the Role:
+We are seeking a talented Senior Software Engineer to join our Core Infrastructure & Platform team. In this role, you will architect, build, and scale resilient microservices and cloud infrastructure powering our mission-critical enterprise platform.
+
+Key Responsibilities:
+- Design, implement, and maintain high-throughput backend services and APIs using Python, Go, or Node.js.
+- Architect scalable cloud solutions on AWS utilizing Docker, Kubernetes, and Terraform.
+- Optimize database queries and caching layers across PostgreSQL and Redis for low-latency transaction processing.
+- Build and maintain continuous integration and deployment pipelines (CI/CD) to ensure reliable releases.
+- Collaborate with cross-functional engineering, product management, and security teams in an Agile environment.
+- Champion engineering best practices, conduct thorough code reviews, and mentor junior and mid-level developers.
+
+Requirements & Qualifications:
+- 5+ years of software engineering experience building production distributed backend systems.
+- Strong proficiency in modern languages such as Python, TypeScript, Go, or Java.
+- Proven experience with container orchestration (Docker, Kubernetes) and infrastructure-as-code (Terraform).
+- Hands-on expertise with relational and non-relational databases (PostgreSQL, Redis, MongoDB).
+- Familiarity with event-driven architectures (Kafka or RabbitMQ) and microservices design patterns.
+- Strong communication, problem-solving, and cross-functional leadership skills.
+- Bachelor’s degree in Computer Science, Computer Engineering, or equivalent practical experience.

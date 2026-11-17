@@ -1,0 +1,19 @@
+AI & Machine Learning Engineer - Generative AI & NLP
+
+Role Overview:
+We are seeking an innovative AI & Machine Learning Engineer to design and deploy state-of-the-art NLP, RAG, and generative AI systems that power our customer intelligence platform.
+
+Responsibilities:
+- Build and fine-tune large language models (LLMs) and embeddings pipelines for high-precision semantic search and conversational agents.
+- Architect scalable RAG workflows using vector databases, LangChain/LlamaIndex, and modern retrieval techniques.
+- Deploy and monitor deep learning models in production using PyTorch, Docker, and AWS SageMaker.
+- Establish automated MLOps pipelines with MLflow for tracking model lineage, evaluation, and latency benchmarking.
+- Partner with product managers and backend software engineers to turn cutting-edge AI prototypes into robust production microservices.
+
+Required Skills:
+- 3+ years of experience in Applied Machine Learning, NLP, or Generative AI.
+- Advanced proficiency in Python, PyTorch, TensorFlow, and Scikit-Learn.
+- Demonstrated hands-on experience building RAG systems and fine-tuning LLMs (transformers, HuggingFace).
+- Strong command of SQL, data manipulation with Pandas/NumPy, and MLOps tools (Docker, AWS, Git).
+- Deep understanding of statistical analysis, evaluation metrics (BLEU, ROUGE, Precision/Recall), and optimization.
+- Master's or Bachelor's degree in Computer Science, Data Science, Statistics, or related technical field.

@@ -1,0 +1,34 @@
+ALEX CHEN
+San Francisco, CA | alex.chen@example.com | (555) 234-5678 | linkedin.com/in/alexchen-dev | github.com/alexchen-dev
+
+PROFESSIONAL SUMMARY
+Senior Full Stack Engineer with 6+ years of experience architecting high-throughput distributed systems and responsive web applications. Proven track record of improving system uptime to 99.98% and accelerating deployment frequency by 4x using containerized microservices and automated CI/CD pipelines. Passionate about developer tooling, API performance optimization, and scalable cloud architectures.
+
+WORK EXPERIENCE
+Senior Software Engineer | CloudScale Technologies | San Francisco, CA
+March 2022 - Present
+• Spearheaded the re-architecture of a legacy monolith into 14 Golang and Node.js microservices on AWS EKS, reducing API latency by 42% across 2.5M daily active users.
+• Engineered a real-time event streaming pipeline using Apache Kafka and Redis, processing over 120,000 transactions per second with zero data loss.
+• Automated multi-region deployment workflows with Terraform and GitHub Actions, cutting mean time to deploy (MTTD) from 4 hours to 12 minutes.
+• Mentored 5 junior engineers through bi-weekly 1:1s, code reviews, and system design workshops, resulting in 2 internal promotions within 18 months.
+
+Software Engineer | NextGen Commerce | San Jose, CA
+July 2019 - February 2022
+• Developed scalable RESTful and GraphQL APIs using Python (FastAPI) and PostgreSQL, supporting $18M in quarterly gross merchandise value.
+• Reduced database query bottlenecks by 65% through index restructuring, Redis caching, and connection pooling optimizations.
+• Built customer-facing dashboard features in React, TypeScript, and Tailwind CSS, increasing checkout conversion rates by 14%.
+• Collaborated with product and QA teams in an Agile Scrum environment, participating in sprint planning and daily standups.
+
+TECHNICAL SKILLS
+• Programming Languages: Python, JavaScript, TypeScript, Go, SQL, HTML5, CSS3
+• Frameworks & Libraries: React, Node.js, Express, FastAPI, Next.js, Django, Tailwind CSS
+• Cloud & DevOps: AWS (EC2, S3, RDS, EKS, Lambda), Docker, Kubernetes, Terraform, CI/CD, GitHub Actions
+• Databases & Tools: PostgreSQL, MySQL, Redis, MongoDB, Kafka, Git, Jira, Linux
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of California, Berkeley | 2015 - 2019
+
+PROJECTS
+• Distributed Task Queue: Open-source asynchronous task processor built with Go and Redis, supporting retry logic and dead-letter queues (1.2k GitHub stars).
+• AI Code Review Assistant: Developer CLI leveraging Gemini LLM to analyze git diffs for security vulnerabilities and syntax anti-patterns.

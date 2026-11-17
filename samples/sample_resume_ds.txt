@@ -1,0 +1,29 @@
+PRIYA PATEL
+New York, NY | priya.patel@example.com | (555) 789-0123 | linkedin.com/in/priyapatel-ai | github.com/priyapatel-data
+
+PROFESSIONAL SUMMARY
+Data Scientist & Machine Learning Engineer with 4+ years of experience developing predictive models, NLP pipelines, and generative AI applications. Adept at fine-tuning open-source LLMs, building retrieval-augmented generation (RAG) architectures, and deploying machine learning services to production. Reduced model inference costs by 38% while improving semantic retrieval accuracy by 24%.
+
+WORK EXPERIENCE
+Machine Learning Engineer | DataCore Solutions | New York, NY
+August 2021 - Present
+• Engineered an enterprise RAG knowledge engine utilizing LangChain, HuggingFace transformers, and Pinecone vector database, serving 40,000+ daily employee search queries.
+• Fine-tuned open-source LLMs using PyTorch and LoRA techniques, achieving an 18% improvement in customer support ticket resolution automation.
+• Optimized deep learning model inference pipelines using ONNX and TensorRT, reducing latency from 450ms to 85ms on AWS SageMaker.
+• Collaborated with product and data engineering teams to establish automated data quality monitoring and model drift detection using MLflow and Prometheus.
+
+Data Scientist | Alpha Analytics | Boston, MA
+June 2019 - July 2021
+• Developed predictive churn models using Scikit-Learn, XGBoost, and Pandas, preventing $2.4M in potential annual customer revenue loss.
+• Designed A/B testing frameworks and statistical significance tests across 12 product feature launches.
+• Built automated ETL pipelines in Python and SQL (Snowflake), processing 5TB of customer telemetry data daily.
+
+TECHNICAL SKILLS
+• Machine Learning & AI: PyTorch, TensorFlow, Scikit-Learn, HuggingFace, LangChain, RAG, LLMs, NLP, Computer Vision
+• Programming: Python, SQL, R, Bash
+• Data & MLOps: Pandas, NumPy, Spark, MLflow, Docker, AWS (SageMaker, S3), Git, Airflow
+• Visualization & Analytics: Tableau, Matplotlib, Seaborn, Power BI
+
+EDUCATION
+Master of Science in Data Science | Columbia University | 2017 - 2019
+Bachelor of Technology in Information Technology | National Institute of Technology | 2013 - 2017

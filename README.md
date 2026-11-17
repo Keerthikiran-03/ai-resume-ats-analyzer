@@ -8,7 +8,15 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License" />
   <img src="https://img.shields.io/badge/Deploy%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render" />
+  <img src="https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-22c55e?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Pages" />
 </p>
+
+---
+
+## 🌐 Live Interactive Demo
+🚀 **[Launch Live ATS Analyzer on GitHub Pages](https://keerthikiran-03.github.io/ai-resume-ats-analyzer/)**
+
+> **No installation required!** Runs 100% client-side in your browser. Upload any PDF/DOCX or click the pre-loaded **⚡ Quick Samples** in the header to see instant ATS scoring and the Google XYZ bullet optimizer in action.
 
 ---
 
